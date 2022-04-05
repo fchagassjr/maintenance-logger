@@ -1,0 +1,14 @@
+maintenance-logger
+|--app.py
+|
+|--maintenance_logger
+|  |
+|  |--__init__.py
+|  |--models.py
+|  |--forms.py
+|  |--views.py
+|  |
+|  |--templates
+|  |--static
+|  |
+|  |
