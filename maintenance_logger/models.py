@@ -1,9 +1,10 @@
-from maintenance_logger import db,login_manager
+from maintenance_logger import db
+from flask_login import UserMixin
 from werkzeug.security import generate_password_hash,check_password_hash
 
 
-class Personnel(db.Model):
-    __tablename__ = 'users'
+class Personnel(db.Model, UserMixin):
+    __tablename__ = 'personnel'
     
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(64))
@@ -12,8 +13,9 @@ class Personnel(db.Model):
     password_hash = db.Column(db.String(128))
     services = db.relationship('Service', backref='personnel', lazy=True)
 
-    def __init__(self,name,email,password):
-        self.name = name
+    def __init__(self,first_name,last_name,email,password):
+        self.first_name = first_name
+        self.last_name = last_name
         self.email=email
         self.password_hash=generate_password_hash(password)
 
@@ -27,10 +29,10 @@ class Personnel(db.Model):
 class Equipment(db.Model):
     __tablename__ = 'equipments'
     
-    id = db.Column(db.Column(db.Integer), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     entity = db.Column(db.String(64), unique=True)
     description = db.Column(db.String(64))
-    services = db.relantionship('Service', backref='equipment', lazy=True)
+    services = db.relationship('Service', backref='equipment', lazy=True)
 
 
 class Service(db.Model):
@@ -38,4 +40,5 @@ class Service(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     personnel_id = db.Column(db.Integer, db.ForeignKey('personnel.id'))
-    equipment_id = db.Column(db.Integer, db.ForeignKey('equipment.id'))
+    equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
+    description = db.Column(db.Text)

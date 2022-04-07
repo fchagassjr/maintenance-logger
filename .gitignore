@@ -1,0 +1,5 @@
+logger-env
+__pycache__
+maintenance_logger/__pycache__
+data.sqlite
+migrations

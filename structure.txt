@@ -4,11 +4,16 @@ maintenance-logger
 |--maintenance_logger
 |  |
 |  |--__init__.py
+|  |--data.sqlite
 |  |--models.py
 |  |--forms.py
-|  |--views.py
 |  |
 |  |--templates
+|  |  |
+|  |  |--index.html
+|  |  |--add_personnel.html
+|  |
 |  |--static
 |  |
-|  |
+|
+|--migrations  
