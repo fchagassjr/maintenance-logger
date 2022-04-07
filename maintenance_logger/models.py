@@ -1,17 +1,18 @@
 from maintenance_logger import db
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash,check_password_hash
+from datetime import datetime
 
-
-class Personnel(db.Model, UserMixin):
-    __tablename__ = 'personnel'
+class Employee(db.Model, UserMixin):
+    __tablename__ = 'employees'
     
     id = db.Column(db.Integer, primary_key=True)
+    employee_id = db.Column(db.Integer, unique=True)
     first_name = db.Column(db.String(64))
     last_name = db.Column(db.String(64))
     email= db.Column(db.String(128), unique=True)
     password_hash = db.Column(db.String(128))
-    services = db.relationship('Service', backref='personnel', lazy=True)
+    services = db.relationship('Service', backref='employee', lazy=True)
 
     def __init__(self,first_name,last_name,email,password):
         self.first_name = first_name
@@ -39,6 +40,13 @@ class Service(db.Model):
     __tablename__='services'
 
     id = db.Column(db.Integer, primary_key=True)
-    personnel_id = db.Column(db.Integer, db.ForeignKey('personnel.id'))
+    employee = db.Column(db.Integer, db.ForeignKey('employee.id'))
     equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
     description = db.Column(db.Text)
+    date = db.Column(db.DateTime)
+
+    def __init__(self, employee_id, equipment_id,description):
+        self.employee_id = employee_id
+        self.equipment_id = equipment_id
+        self.description = description
+        self.date = datetime.utcnow().strftime
