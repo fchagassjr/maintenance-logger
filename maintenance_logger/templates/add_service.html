@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>New Service Entry:</h2>
+
+    <form method="POST">
+        {{form.hidden_tag()}}
+        {{form.entity.label}}{{form.entity}}
+        {% for error in form.entity.errors %}{{error}}{% endfor %}<br>
+        {{form.description.label}}{{form.description}}
+        {% for error in form.description.errors %}{{error}}{% endfor %}<br>
+        {{form.servdate.label}}{{form.servdate}}
+        {% for error in form.servdate.errors %}{{error}}{% endfor %}<br>
+        {{form.submit}}
+    </form>
+    {% endblock %}

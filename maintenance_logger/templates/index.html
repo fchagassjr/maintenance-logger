@@ -1,19 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-</head>
-<body>
-    <h2>Initial page</h2>
+{% extends "base.html" %}
+{% block content %}
     {% if current_user.is_authenticated %}
-        <p>Welcome {{current_user.first_name}} to the maintenance logger</p>
-        <a href="{{url_for('listPersonnel')}}">List Personnel</a>
-        <a href="{{url_for('logoutPersonnel')}}">Log Out</a>
+        <p>Welcome {{current_user.firstname}} to the maintenance logger</p>
+    
     {% else %}
-        <p>Please, <a href="{{url_for('loginPersonnel')}}">Log In</a></p>
+        <p>Please Log In to access the database</p>
+        <p>If you don't have an account, Sign In</p>
     {% endif %}
-</body>
-</html>
+{% endblock %}

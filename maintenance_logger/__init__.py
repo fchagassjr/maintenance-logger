@@ -19,7 +19,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 from maintenance_logger.models import Employee, Equipment, Service
-from maintenance_logger.forms import AddEmployee, LoginEmployee, AddService
+from maintenance_logger.forms import AddEmployee, AddEquipment, LoginEmployee, AddService
 
 
 @login_manager.user_loader
@@ -32,6 +32,21 @@ def load_user(user_id):
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
+
+@app.route('/database')
+@login_required
+def database():
+    employee_list = Employee.query.all()
+    equipment_list = Equipment.query.all()
+    service_list = Service.query.all()
+
+    return render_template('database.html', 
+                            employee_list=employee_list,
+                            equipment_list=equipment_list,
+                            service_list=service_list)
+
 
 
 
@@ -48,10 +63,10 @@ def loginEmployee():
                 login_user(user)
                 return redirect(url_for('index'))
             else:
-                return render_template('login_employee.html', form=form, err="Email or/and Password incorrect")
+                return render_template('login_employee.html', form=form, login_err=True)
 
         else:
-            return render_template('login_employee.html', form=form, err="Email or/and Password incorrect")
+            return render_template('login_employee.html', form=form, login_err="Email or/and Password incorrect")
     
     return render_template('login_employee.html', form=form)
 
@@ -68,9 +83,9 @@ def addEmployee():
     form = AddEmployee()
 
     if form.validate_on_submit():
-        new_employee = Employee(form.employee_id.data,
-                                form.first_name.data,
-                                form.last_name.data,
+        new_employee = Employee(form.employeeid.data,
+                                form.firstname.data,
+                                form.lastname.data,
                                 form.email.data,
                                 form.password.data)
         db.session.add(new_employee)
@@ -81,22 +96,28 @@ def addEmployee():
 
 
 
-@app.route('/employee/list')
-@login_required
-def listEmployee():
-    employee_list = Employee.query.all()
-    listOutput = ''
-    for employee in employee_list:
-        listOutput += f'<h3>{employee.first_name} {employee.last_name}</h3>{employee.email}<br>'
-    
-    return listOutput
-
-
 # Equipment @app.routes:
+
+@app.route('/equipment/add', methods=['GET','POST'])
+@login_required
+def addEquipment():
+    form = AddEquipment()
+
+    if form.validate_on_submit():
+        new_equipment = Equipment(form.entity.data,
+                                form.description.data,
+                                form.location.data)
+        db.session.add(new_equipment)
+        db.session.commit()
+        return redirect(url_for('index'))
+    
+    return render_template('add_equipment.html', form=form)
+
+
 
 # Service @app.routes:
 
-@app.route('service/add')
+@app.route('/service/add', methods=['GET', 'POST'])
 @login_required
 def addService():
     form = AddService()
@@ -106,7 +127,7 @@ def addService():
         new_service = Service(current_user.id, 
                               equipment.id,
                               form.description.data,
-                              form.date.data)
+                              form.servdate.data)
         db.session.add(new_service)
         db.session.commit()
         return redirect(url_for('index'))
