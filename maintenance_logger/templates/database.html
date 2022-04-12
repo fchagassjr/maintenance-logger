@@ -9,7 +9,7 @@
   </nav>
   <div class="tab-content" id="nav-tabContent">
     <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-        <table class="table">
+        <table class="table table-bordered table-primary">
             <thead>
               <tr>
                 <th scope="col">Employee ID</th>
@@ -29,23 +29,58 @@
         </table>  
     </div>
     <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-        <ul>
-            {% for equipment in equipment_list %}
-                <li>{{equipment.entity}}: {{equipment.description}}</li>    
-            {% endfor %}
-        </ul>
+        <table class="table table-bordered table-secondary">
+            <thead>
+              <tr>
+                <th scope="col">Entity</th>
+                <th scope="col">Description</th>
+                <th scope="col">Location</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for equipment in equipment_list %}
+                <tr>
+                    <th scope="row">{{equipment.entity}}</th>
+                    <td> {{equipment.description}}</td>
+                    <td>{{equipment.location}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>  
     </div>
     <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-        <ul>
-            {% for service in service_list %}
-                <li>Date {{service.servdate}}:
-                    <ul>
-                        <li>Equipment -> {{service.equipment.entity}}: {{service.equipment.description}}</li> 
-                        <li>>Performed by -> {{service.employee.employeeid}}: {{service.employee.lastname}}</li>
-                    </ul>
-                </li>    
-            {% endfor %}
-        </ul>
+        <table class="table table-bordered">
+            <thead  style="position: sticky;top: 0">
+                <thead>
+                    <tr>
+                    <th scope="col" colspan="2" class="table-secondary">Equipment</th>
+                    <th scope="col" colspan="2" class="table-primary">Employee</th>
+                    <th scope="col" colspan="2" class="table-warning">Service</th>
+                    </tr>
+                </thead>
+           
+              <tr>
+                  <th scope="col" class="table-secondary">Entity</th>
+                  <th scope="col" class="table-secondary">Description</th>
+                  <th scope="col" class="table-primary">ID</th>
+                  <th scope="col" class="table-primary">Last Name</th>
+                  <th scope="col" class="table-warning">Date</th>
+                  <th scope="col" class="table-warning">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for service in service_list %}
+                <tr>
+                    <th scope="row" class="table-secondary">{{service.equipment.entity}}</th>
+                    <td class="table-secondary">{{service.equipment.description}}</td>
+                    <td class="table-primary">{{service.employee.employeeid}}</td>
+                    <td class="table-primary">{{service.employee.lastname}}</td>
+                    <td class="table-warning">{{service.servdate}}</td>
+                    <td class="table-warning">{{service.description}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>  
     </div>
   </div>
   

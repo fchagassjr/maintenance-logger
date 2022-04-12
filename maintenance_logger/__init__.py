@@ -2,14 +2,18 @@ import os
 from flask import Flask, render_template, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_admin import Admin
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
+secret = os.urandom(32)
+
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'mysecret'
+app.config['SECRET_KEY'] = secret
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'+os.path.join(basedir, 'data.sqlite')
 app.config['TRACK_MODIFICATIONS'] = False
+app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
 
 db=SQLAlchemy(app)
 
@@ -18,8 +22,16 @@ Migrate(app,db)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+admin = Admin(app,name='Admin Page',template_mode='bootstrap3')
+
 from maintenance_logger.models import Employee, Equipment, Service
-from maintenance_logger.forms import AddEmployee, AddEquipment, LoginEmployee, AddService
+from maintenance_logger.forms import LoginEmployee, AddService
+from maintenance_logger.administration.views import EmployeeView, EquipmentView
+
+
+
+admin.add_view(EmployeeView(Employee, db.session))
+admin.add_view(EquipmentView(Equipment, db.session))
 
 
 @login_manager.user_loader
@@ -78,40 +90,40 @@ def logoutEmployee():
 
 
 
-@app.route('/employee/add', methods=['GET','POST'])
-def addEmployee():
-    form = AddEmployee()
+# @app.route('/employee/add', methods=['GET','POST'])
+# def addEmployee():
+#     form = AddEmployee()
 
-    if form.validate_on_submit():
-        new_employee = Employee(form.employeeid.data,
-                                form.firstname.data,
-                                form.lastname.data,
-                                form.email.data,
-                                form.password.data)
-        db.session.add(new_employee)
-        db.session.commit()
-        return redirect(url_for('loginEmployee'))
+#     if form.validate_on_submit():
+#         new_employee = Employee(form.employeeid.data,
+#                                 form.firstname.data,
+#                                 form.lastname.data,
+#                                 form.email.data,
+#                                 form.password.data)
+#         db.session.add(new_employee)
+#         db.session.commit()
+#         return redirect(url_for('loginEmployee'))
     
-    return render_template('add_employee.html', form=form)
+#     return render_template('add_employee.html', form=form)
 
 
 
 # Equipment @app.routes:
 
-@app.route('/equipment/add', methods=['GET','POST'])
-@login_required
-def addEquipment():
-    form = AddEquipment()
+# @app.route('/equipment/add', methods=['GET','POST'])
+# @login_required
+# def addEquipment():
+#     form = AddEquipment()
 
-    if form.validate_on_submit():
-        new_equipment = Equipment(form.entity.data,
-                                form.description.data,
-                                form.location.data)
-        db.session.add(new_equipment)
-        db.session.commit()
-        return redirect(url_for('index'))
+#     if form.validate_on_submit():
+#         new_equipment = Equipment(form.entity.data,
+#                                 form.description.data,
+#                                 form.location.data)
+#         db.session.add(new_equipment)
+#         db.session.commit()
+#         return redirect(url_for('index'))
     
-    return render_template('add_equipment.html', form=form)
+#     return render_template('add_equipment.html', form=form)
 
 
 
