@@ -1,6 +1,6 @@
 from maintenance_logger.models import Employee,Equipment
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, IntegerField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, IntegerField, HiddenField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 
 
@@ -23,16 +23,20 @@ class AddEmployee(FlaskForm):
 
 
 class EditEmployee(FlaskForm):
-    firstname = StringField('First Name', validators=[DataRequired()])
-    lastname = StringField('Last Name', validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired(),Email()])
-    reset_password = BooleanField('Reset Password')
+
+    firstname = StringField('First Name')
+    lastname = StringField('Last Name')
+    hidden_email = HiddenField('Actual Email')
+    email = StringField('Email', validators=[Email()])
+    password = PasswordField('Change Password', validators=[EqualTo('password_confirm', message='Password must match')])
+    password_confirm = PasswordField('Confirm New Password')
     
     
     def validate_email(self, email):
+        
         if Employee.query.filter_by(email=email.data).first():
-            
-            raise ValidationError('Email already registered')
+            if not email.data == self.hidden_email.data:
+                raise ValidationError('Email already registered')
 
 class AddEquipment(FlaskForm):
     entity = StringField('Entity', validators=[DataRequired()])

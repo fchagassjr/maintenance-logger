@@ -16,10 +16,12 @@ class EmployeeView(ModelView):
     def edit_form(self, obj=None):
         form = EditEmployee()
         if form.validate_on_submit():
+            print('after submit')
             return form
         form.firstname.data = obj.firstname
         form.lastname.data = obj.lastname
         form.email.data = obj.email
+        form.hidden_email.data = obj.email
         return form
     
 
@@ -27,10 +29,8 @@ class EmployeeView(ModelView):
         if is_created:
             model.password_hash = generate_password_hash(form.password.data)
         else:
-            if form.reset_password:
-                new_password = b64encode(os.urandom(6)).decode('utf-8')
-                print(new_password)
-                model.password_hash = generate_password_hash(new_password)
+            if form.password.data is not None:
+                model.password_hash = generate_password_hash(form.password.data)
         return super().on_model_change(form, model, is_created)
 
 class EquipmentView(ModelView):

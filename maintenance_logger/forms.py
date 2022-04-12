@@ -1,8 +1,8 @@
 from maintenance_logger.models import Employee,Equipment,Service
 from datetime import date
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, IntegerField, DateField
-from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
+from wtforms import StringField, PasswordField, SubmitField, IntegerField, DateField, TextAreaField
+from wtforms.validators import DataRequired, Email, ValidationError
 
 
 
