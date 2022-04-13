@@ -82,7 +82,7 @@ The application should start at http://127.0.0.1:5000/
 
 ## Levels of access
 
-Main pages will be accessible to regular user, but when the application starts, the user admin is created.
+Main pages will be accessible to regular user, but when the application starts for the first time, the user admin is created.
 ```
 email: admin@admin.com
 password: admin
