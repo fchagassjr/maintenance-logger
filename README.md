@@ -82,5 +82,9 @@ The application should start at http://127.0.0.1:5000/
 
 ## Levels of access
 
-Main pages will be accessible to regular user
-By typing http://127.0.0.1:5000/admin, administrative level is accessed
+Main pages will be accessible to regular user, but when the application starts, the user admin is created.
+```
+email: admin@admin.com
+password: admin
+```
+By typing http://127.0.0.1:5000/admin on the browser, administrative level is accessed
