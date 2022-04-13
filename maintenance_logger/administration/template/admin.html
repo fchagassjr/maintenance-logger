@@ -1,0 +1,14 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+<h2>Personnel Log In:</h2>
+
+<form method="POST">
+    {{form.hidden_tag()}}
+    {{form.user.label}}{{form.user}}
+    {% for error in form.email.errors %}{{error}}{% endfor %}<br>
+    {{form.password.label}}{{form.password}}
+    {% for error in form.password.errors %}{{error}}{% endfor %}<br>
+    {% if login_err %}Email and/or Password incorrect<br>{% endif %}
+    {{form.submit}}
+</form>
+{% endblock %}

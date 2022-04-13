@@ -1,19 +1,32 @@
 maintenance-logger
-|--app.py
+|
+|--flask_app.py
 |
 |--maintenance_logger
 |  |
 |  |--__init__.py
 |  |--data.sqlite
 |  |--models.py
-|  |--forms.py
 |  |
 |  |--templates
 |  |  |
 |  |  |--index.html
-|  |  |--add_personnel.html
+|  |  |--base.html
 |  |
-|  |--static
-|  |
+|  |--administration
+|  |  |
+|  |  |--__init__.py
+|  |  |--forms.py
+|  |   
+|  |  
+|  |--employee
+|     |
+|     |--__init__.py
+|     |--forms.py
+|     |--templates
+|        |
+|        |--database.html
+|        |--login_employee.html
+|        |--add_service.html
 |
 |--migrations  

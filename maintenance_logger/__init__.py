@@ -36,6 +36,12 @@ admin.add_view(EquipmentView(Equipment, db.session))
 
 app.register_blueprint(bp_employees)
 
+administrator = Employee.query.filter_by(email='admin@admin.com').first()
+if administrator is None:
+    administrator = Employee(0000,None,None,'admin@admin.com','admin')
+    db.session.add(administrator)
+    db.session.commit()
+
 @login_manager.user_loader
 def load_user(user_id):
     return Employee.query.get(user_id)

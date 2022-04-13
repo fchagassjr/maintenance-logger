@@ -1,17 +1,21 @@
+from flask_login import current_user
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.base import AdminIndexView, expose
 from maintenance_logger.administration.forms import AddEmployee, AddEquipment, EditEmployee, EditEquipment
 from werkzeug.security import generate_password_hash
 
 
-class MyHomeView(AdminIndexView):
-    @expose('/')
-    def index(self):
-        arg1 = 'Welcome to the ADMINISTRATION PAGE'
-        return self.render('admin/myhome.html', arg1=arg1)
-
-
 class EmployeeView(ModelView):
+
+    def is_accessible(self):
+        if current_user.is_anonymous:
+            return False
+        else:
+            if current_user.email == 'admin@admin.com':
+                return True
+            else:
+                return False
+
 
     column_excluded_list = ['password_hash']
     form_excluded_columns = ['services', 'password_hash']
@@ -44,6 +48,16 @@ class EmployeeView(ModelView):
 
 
 class EquipmentView(ModelView):
+
+    def is_accessible(self):
+        if current_user.is_anonymous:
+            return False
+        else:
+            if current_user.email == 'admin@admin.com':
+                return True
+            else:
+                return False
+
 
     form_excluded_columns = ['services']
 
